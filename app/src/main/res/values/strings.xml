@@ -4,4 +4,7 @@
     <string name="rock">Rock</string>
     <string name="scissors">Scissors</string>
     <string name="game_result">Make your choice</string>
+    <string name="quote_format">\"%s\"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
