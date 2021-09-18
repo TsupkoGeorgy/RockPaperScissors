@@ -1,32 +1,20 @@
 package com.example.rockpaperscissors.game
 
-import android.app.Application
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.rockpaperscissors.database.GameResult
-import javax.sql.DataSource
-
 class GameViewModel : ViewModel() {
 
     private lateinit var wordList: MutableList<String>
 
-
     //Необходимо сделать дополнительнй не изменяемый лист List
     //и заполнять его из _gameResultList
-    private val _tempList = MutableLiveData<List<String>>()
-    val tempList: LiveData<List<String>>
-        get() = _tempList
+    private val _tempList = MutableLiveData<MutableList<String>>()
 
-
-    private var _gameResultList = MutableLiveData<MutableList<String>>()
-//    val gameResultList: LiveData<MutableList<String>>
-//        get() = _gameResultList
-
-
+    private val _gameResultList = MutableLiveData<List<String>>()
+    val gameResultList: LiveData<List<String>>
+        get() = _gameResultList
 
     private val _gameResult = MutableLiveData<String>()
     val gameResult: LiveData<String>
@@ -34,12 +22,6 @@ class GameViewModel : ViewModel() {
 
 
     private val _playerChoice = MutableLiveData<String>()
-    val playerChoice: LiveData<String>
-        get() = _playerChoice
-
-//    private val _gameResultList = MutableLiveData<MutableList<String>>()
-//    val gameResultList: LiveData<MutableList<String>>
-//        get() = _gameResultList
 
     fun onRockButtonClicked() {
         _playerChoice.value = "Rock"
@@ -76,8 +58,8 @@ class GameViewModel : ViewModel() {
         else
             _gameResult.value = "You lose!"
 
-        _gameResultList.value?.add(_gameResult.value!!)
-        _tempList.value = _gameResultList.value
+        _tempList.value?.add(_gameResult.value!!)
+        _gameResultList.value = _tempList.value
 
     }
 
@@ -88,10 +70,6 @@ class GameViewModel : ViewModel() {
             "Scissors"
         )
         wordList.shuffle()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
     }
 }
 

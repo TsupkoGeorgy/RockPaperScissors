@@ -35,29 +35,18 @@ class GameFragment : Fragment() {
         gameViewModelFactory = GameViewModelFactory()
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
-
-
-
-
         binding.gameViewModel = gameViewModel
         binding.setLifecycleOwner(this)
 
         val adapter = GameResultAdapter()
         binding.gameResultList.adapter = adapter
 
-        gameViewModel.tempList.observe(viewLifecycleOwner, Observer {
+        gameViewModel.gameResultList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.data = it
                 Log.i("adapter", "adapter data = ${adapter.data}")
             }
         })
-
-
-
-
-
-
-        // Inflate the layout for this fragment
         return binding.root
     }
 
