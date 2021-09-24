@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,7 +12,7 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -27,6 +28,7 @@
             android:layout_marginEnd="8dp"
             android:onClick="@{() -> gameViewModel.onPaperButtonClicked()}"
             android:text="@string/paper"
+            app:cornerRadius="25dp"
             app:layout_constraintEnd_toStartOf="@+id/Rock_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/game_result_text"
@@ -41,6 +43,7 @@
             android:layout_marginEnd="16dp"
             android:onClick="@{() -> gameViewModel.onRockButtonClicked()}"
             android:text="@string/rock"
+            app:cornerRadius="25dp"
             app:layout_constraintEnd_toStartOf="@+id/scissors_button"
             app:layout_constraintStart_toEndOf="@+id/Paper_button"
             app:layout_constraintTop_toBottomOf="@+id/game_result_text"
@@ -55,6 +58,7 @@
             android:layout_marginEnd="8dp"
             android:onClick="@{() -> gameViewModel.onScissorsButtonClicked()}"
             android:text="@string/scissors"
+            app:cornerRadius="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/Rock_button"
             app:layout_constraintTop_toBottomOf="@+id/game_result_text"
@@ -86,11 +90,11 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Rock_button"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layout_constraintTop_toBottomOf="@+id/Rock_button" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

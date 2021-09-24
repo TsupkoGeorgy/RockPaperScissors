@@ -1,9 +1,11 @@
 package com.example.rockpaperscissors.game
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+
 class GameViewModel : ViewModel() {
 
     private lateinit var wordList: MutableList<String>
@@ -11,6 +13,8 @@ class GameViewModel : ViewModel() {
     //Необходимо сделать дополнительнй не изменяемый лист List
     //и заполнять его из _gameResultList
     private val _tempList = MutableLiveData<MutableList<String>>()
+    val tempList: LiveData<MutableList<String>>
+        get() = _tempList
 
     private val _gameResultList = MutableLiveData<List<String>>()
     val gameResultList: LiveData<List<String>>
@@ -40,8 +44,8 @@ class GameViewModel : ViewModel() {
     }
 
     init {
-        resetList()
-        _gameResultList.value = mutableListOf()
+        _tempList.value = mutableListOf()
+        _gameResultList.value = listOf()
         _gameResult.value = "Make your choice"
     }
 
@@ -60,6 +64,8 @@ class GameViewModel : ViewModel() {
 
         _tempList.value?.add(_gameResult.value!!)
         _gameResultList.value = _tempList.value
+
+        Log.i("adapter", "temp data = ${_tempList.value}")
 
     }
 

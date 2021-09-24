@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.rockpaperscissors.R
 
 class GameResultAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
-
-
+    val i = 0
     var data = listOf<String>()
         set(value) {
             field = value
@@ -19,7 +18,7 @@ class GameResultAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
 
     override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
         val item = data[position]
-        holder.textView.text = item
+        holder.textView.text = "${position.plus(1)}. $item"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
