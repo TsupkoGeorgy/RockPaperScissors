@@ -9,7 +9,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rockpaperscissors.R
+import com.example.rockpaperscissors.database.GameResult
+import com.example.rockpaperscissors.database.GameResultDatabase
 import com.example.rockpaperscissors.databinding.GameFragmentBinding
 
 
@@ -32,23 +37,29 @@ class GameFragment : Fragment() {
             false
         )
 
-        gameViewModelFactory = GameViewModelFactory()
+        val application = requireNotNull(this.activity).application
+        val dataSource = GameResultDatabase.getInstance(application).gameResultDatabaseDao
+
+        gameViewModelFactory = GameViewModelFactory(dataSource, application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
         binding.gameViewModel = gameViewModel
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
 
         val adapter = GameResultAdapter()
         binding.gameResultList.adapter = adapter
+        binding.gameResultList.layoutManager = LinearLayoutManager(requireContext())
 
-        gameViewModel.gameResultList.observe(viewLifecycleOwner, Observer {
+        binding.gameResultList.addItemDecoration(
+            DividerItemDecoration(
+                context, LinearLayoutManager.VERTICAL
+            )
+        )
+        gameViewModel.games.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.data = it
-                Log.i("adapter", "adapter data = ${adapter.data}")
+                adapter.submitList(it)
             }
         })
         return binding.root
     }
-
-
 }
