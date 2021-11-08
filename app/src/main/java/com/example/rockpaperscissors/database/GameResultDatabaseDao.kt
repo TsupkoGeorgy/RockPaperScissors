@@ -12,14 +12,16 @@ interface GameResultDatabaseDao {
     @Update
     fun update(result: GameResult)
 
-    @Query(value = "SELECT * from game_result_history_database WHERE gameId = :key")
+    @Query(value = "SELECT * from game_result_history_database WHERE id = :key")
     fun get(key: Long): GameResult
 
     @Query(value = "DELETE FROM game_result_history_database")
     fun clear()
 
-    @Query(value = "SELECT * FROM game_result_history_database ORDER BY gameId DESC")
+    @Query(value = "SELECT * FROM game_result_history_database ORDER BY id DESC")
     fun getAllGameResults(): LiveData<List<GameResult>>
 
+    @Query("SELECT * FROM game_result_history_database ORDER BY id DESC LIMIT 1")
+    suspend fun getGame(): GameResult?
 
 }

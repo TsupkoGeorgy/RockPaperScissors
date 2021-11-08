@@ -8,11 +8,11 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "game_result_history_database")
 data class GameResult(
     @PrimaryKey(autoGenerate = true)
-    var gameId: Long = 0L,
+    var id: Long = 0L,
 
     @ColumnInfo(name = "game_result")
-    var gameResult: String,
+    var result: String = "",
 
     @ColumnInfo(name = "game_score")
-    var gameScore: String
+    var score: String = ""
 )

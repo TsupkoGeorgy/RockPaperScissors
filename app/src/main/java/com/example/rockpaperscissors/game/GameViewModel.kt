@@ -1,72 +1,103 @@
 package com.example.rockpaperscissors.game
 
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.example.rockpaperscissors.database.GameResult
+import com.example.rockpaperscissors.database.GameResultDatabaseDao
+import kotlinx.coroutines.*
 
-class GameViewModel : ViewModel() {
+class GameViewModel(
+    private val dataSource: GameResultDatabaseDao,
+    application: Application
+) : AndroidViewModel(application) {
+
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 
     private lateinit var wordList: MutableList<String>
-
-    //Необходимо сделать дополнительнй не изменяемый лист List
-    //и заполнять его из _gameResultList
-    private val _tempList = MutableLiveData<MutableList<String>>()
-    val tempList: LiveData<MutableList<String>>
-        get() = _tempList
-
-    private val _gameResultList = MutableLiveData<List<String>>()
-    val gameResultList: LiveData<List<String>>
-        get() = _gameResultList
 
     private val _gameResult = MutableLiveData<String>()
     val gameResult: LiveData<String>
         get() = _gameResult
 
 
+    private var _score = MutableLiveData<String>()
+
     private val _playerChoice = MutableLiveData<String>()
+
+    val games = dataSource.getAllGameResults()
+
 
     fun onRockButtonClicked() {
         _playerChoice.value = "Rock"
-        gameResult()
-
+        uiScope.launch {
+            gameResult()
+        }
     }
 
     fun onPaperButtonClicked() {
         _playerChoice.value = "Paper"
-        gameResult()
+        uiScope.launch {
+            gameResult()
+        }
     }
 
     fun onScissorsButtonClicked() {
         _playerChoice.value = "Scissors"
-        gameResult()
+        uiScope.launch {
+            gameResult()
+        }
     }
 
     init {
-        _tempList.value = mutableListOf()
-        _gameResultList.value = listOf()
         _gameResult.value = "Make your choice"
+
     }
 
-
-    private fun gameResult() {
+    private suspend fun gameResult() {
         resetList()
-        if (_playerChoice.value == wordList.first()) _gameResult.value = "Tie!"
-        else if (
+        var playerScore = 0
+        var gameScore = 0
+        if (_playerChoice.value == wordList.first()) {
+            playerScore = 0
+            gameScore = 0
+            _gameResult.value = "Tie!"
+            _score.value = "$gameScore || $playerScore "
+        } else if (
             (_playerChoice.value == "Rock" && wordList.first() == "Scissors") ||
             (_playerChoice.value == "Paper" && wordList.first() == "Rock") ||
             (_playerChoice.value == "Scissors" && wordList.first() == "Paper")
-        )
+        ) {
+            playerScore = 1
+            gameScore = 0
             _gameResult.value = "You win!"
-        else
+            _score.value = "$gameScore || $playerScore "
+        } else {
+            playerScore = 0
+            gameScore = 1
             _gameResult.value = "You lose!"
+            _score.value = "$gameScore || $playerScore "
+        }
 
-        _tempList.value?.add(_gameResult.value!!)
-        _gameResultList.value = _tempList.value
 
-        Log.i("adapter", "temp data = ${_tempList.value}")
+        val gameResult = GameResult(0, _gameResult.value!!, _score.value!!)
 
+
+        uiScope.launch {
+            insert(gameResult)
+        }
+    }
+
+    private suspend fun insert(gameResult: GameResult) {
+        withContext(Dispatchers.IO) {
+            dataSource.insert(gameResult)
+        }
     }
 
     private fun resetList() {

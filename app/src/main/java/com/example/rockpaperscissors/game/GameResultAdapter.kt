@@ -1,33 +1,48 @@
 package com.example.rockpaperscissors.game
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rockpaperscissors.R
+import com.example.rockpaperscissors.database.GameResult
 
-class GameResultAdapter: RecyclerView.Adapter<TextItemViewHolder>() {
-    val i = 0
-    var data = listOf<String>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class GameResultAdapter :
+    ListAdapter<GameResult, GameResultAdapter.ViewHolder>(GameResultDiffCallback()) {
 
-    override fun getItemCount(): Int = data.size
-
-    override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
-        val item = data[position]
-        holder.textView.text = "${position.plus(1)}. $item"
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
+        val res = holder.itemView.context.resources //.text = "${position.plus(1)}. $item"
+        holder.gameResult.text = item.result
+        holder.gameScore.text = item.score
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val layoutInflater  = LayoutInflater.from(parent.context)
+        val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater
-            .inflate(R.layout.text_item_view, parent, false ) as TextView
-        return TextItemViewHolder(view)
+            .inflate(R.layout.list_item_game_result, parent, false)
+        return ViewHolder(view)
+    }
+
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        val gameResult: TextView = itemView.findViewById(R.id.gameResultText)
+        val gameScore: TextView = itemView.findViewById(R.id.gameScoreText)
     }
 }
 
-class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
+class GameResultDiffCallback : DiffUtil.ItemCallback<GameResult>() {
+    override fun areItemsTheSame(oldItem: GameResult, newItem: GameResult): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: GameResult, newItem: GameResult): Boolean {
+        return oldItem == newItem
+    }
+}
+
