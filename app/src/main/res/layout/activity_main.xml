@@ -6,15 +6,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/container"
         tools:context=".MainActivity">
 
 
         <fragment
-            android:id="@+id/game_fragment"
-            android:name="com.example.rockpaperscissors.game.GameFragment"
+            android:id="@+id/navigation"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/navigation"
+            />
 
 
 

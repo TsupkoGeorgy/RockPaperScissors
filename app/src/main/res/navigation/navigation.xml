@@ -8,11 +8,11 @@
     <fragment
         android:id="@+id/titleFragment"
         android:name="com.example.rockpaperscissors.ui.title.TitleFragment"
-        android:label="title_fragment"
-        tools:layout="@layout/title_fragment" >
+        android:label="title_fragment">
         <action
             android:id="@+id/action_titleFragment_to_gameFragment"
-            app:destination="@id/gameFragment" />
+            app:destination="@id/gameFragment"
+            app:launchSingleTop="true" />
         <action
             android:id="@+id/action_titleFragment_to_scoreFragment"
             app:destination="@id/scoreFragment" />
@@ -29,7 +29,13 @@
         android:id="@+id/scoreFragment"
         android:name="com.example.rockpaperscissors.ui.score.ScoreFragment"
         android:label="score_fragment"
-        tools:layout="@layout/score_fragment" />
+        tools:layout="@layout/score_fragment" >
+        <action
+            android:id="@+id/action_scoreFragment_to_titleFragment"
+            app:destination="@id/titleFragment"
+            app:launchSingleTop="false"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/resultFragment"
         android:name="com.example.rockpaperscissors.ui.result.ResultFragment"

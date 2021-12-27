@@ -1,7 +1,6 @@
 package com.example.rockpaperscissors.game
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.rockpaperscissors.database.GameResult
 import com.example.rockpaperscissors.database.GameResultDatabaseDao

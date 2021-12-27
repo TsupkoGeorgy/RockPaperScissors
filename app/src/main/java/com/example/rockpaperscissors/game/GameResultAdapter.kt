@@ -15,9 +15,9 @@ class GameResultAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        val res = holder.itemView.context.resources //.text = "${position.plus(1)}. $item"
         holder.gameResult.text = item.result
         holder.gameScore.text = item.score
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,5 +44,6 @@ class GameResultDiffCallback : DiffUtil.ItemCallback<GameResult>() {
     override fun areContentsTheSame(oldItem: GameResult, newItem: GameResult): Boolean {
         return oldItem == newItem
     }
+
 }
 
