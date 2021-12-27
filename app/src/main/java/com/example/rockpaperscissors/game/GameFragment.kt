@@ -57,7 +57,9 @@ class GameFragment : Fragment() {
         )
         gameViewModel.games.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                adapter.submitList(it) {
+                    binding.gameResultList.scrollToPosition(0)
+                }
             }
         })
         return binding.root
