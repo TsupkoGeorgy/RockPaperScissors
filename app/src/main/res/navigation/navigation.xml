@@ -40,5 +40,15 @@
         android:id="@+id/resultFragment"
         android:name="com.example.rockpaperscissors.ui.result.ResultFragment"
         android:label="result_fragment"
-        tools:layout="@layout/result_fragment" />
+        tools:layout="@layout/result_fragment" >
+        <action
+            android:id="@+id/action_resultFragment_to_titleFragment"
+            app:destination="@id/titleFragment" />
+        <action
+            android:id="@+id/action_resultFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
 </navigation>
