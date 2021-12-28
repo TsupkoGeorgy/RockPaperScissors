@@ -1,16 +1,12 @@
 package com.example.rockpaperscissors.ui.score
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.example.rockpaperscissors.database.GameResultDatabaseDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 
 class ScoreViewModel(
-    dataSource: GameResultDatabaseDao,
+    val dataSource: GameResultDatabaseDao,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -18,6 +14,10 @@ class ScoreViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     val games = dataSource.getAllGameResults()
+
+    val clearButtonVisible = Transformations.map(games) {
+        it?.isNotEmpty()
+    }
 
     init {
 
@@ -27,6 +27,18 @@ class ScoreViewModel(
     val eventBack: LiveData<Boolean>
         get() = _eventBack
 
+
+    fun onClear() {
+        viewModelScope.launch {
+            clear()
+        }
+    }
+
+    private suspend fun clear() {
+        withContext(Dispatchers.IO) {
+            dataSource.clear()
+        }
+    }
 
     fun onBack() {
         _eventBack.value = true
