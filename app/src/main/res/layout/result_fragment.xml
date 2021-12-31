@@ -15,33 +15,59 @@
         android:layout_height="match_parent"
         tools:context=".ui.result.ResultFragment">
 
-        <TextView
-            android:id="@+id/result_textView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@{resultViewModel.resultText}"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/restart_game_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35000002">
 
-        <TextView
-            android:id="@+id/score_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            <TextView
+                android:id="@+id/result_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@{resultViewModel.resultText}"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/black_text_color"
+                android:textSize="40sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toTopOf="@+id/score_textView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            android:text="@{resultViewModel.scoreText}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/result_textView" />
+            <TextView
+                android:id="@+id/score_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@{resultViewModel.scoreText}"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/black_text_color"
+                android:textSize="40sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toTopOf="@+id/restart_game_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/result_textView" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/restart_game_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             android:onClick="@{() -> resultViewModel.onRestartGame()}"
             android:text="Restart"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             android:onClick="@{() -> resultViewModel.onClose()}"
             android:text="Close"
             app:layout_constraintBottom_toBottomOf="parent"

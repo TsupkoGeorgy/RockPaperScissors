@@ -19,9 +19,7 @@ class ScoreViewModel(
         it?.isNotEmpty()
     }
 
-    init {
 
-    }
 
     private val _eventBack = MutableLiveData<Boolean>()
     val eventBack: LiveData<Boolean>
@@ -29,7 +27,7 @@ class ScoreViewModel(
 
 
     fun onClear() {
-        viewModelScope.launch {
+        uiScope.launch {
             clear()
         }
     }

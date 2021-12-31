@@ -47,8 +47,5 @@
         <action
             android:id="@+id/action_resultFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
-        <argument
-            android:name="id"
-            app:argType="long" />
     </fragment>
 </navigation>

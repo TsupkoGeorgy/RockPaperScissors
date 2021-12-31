@@ -14,7 +14,7 @@ import com.example.rockpaperscissors.R
 import com.example.rockpaperscissors.database.GameResultDatabase
 import com.example.rockpaperscissors.databinding.ResultFragmentBinding
 
-class ResultFragment() : Fragment() {
+class ResultFragment : Fragment() {
 
 
     override fun onCreateView(
@@ -24,24 +24,23 @@ class ResultFragment() : Fragment() {
         val binding: ResultFragmentBinding =
             DataBindingUtil.inflate(
                 inflater,
-                R.layout.title_fragment,
+                R.layout.result_fragment,
                 container,
                 false
             )
 
-        val resultFragmentArgs by navArgs<ResultFragmentArgs>()
-
-
         val application = requireNotNull(this.activity).application
         val dataSource = GameResultDatabase.getInstance(application).gameResultDatabaseDao
 
-        val viewModelFactory = ResultViewModelFactory(dataSource, resultFragmentArgs.id)
+        val viewModelFactory = ResultViewModelFactory( dataSource)
         val viewModel: ResultViewModel =
             ViewModelProvider(this, viewModelFactory).get(ResultViewModel::class.java)
 
         binding.resultViewModel = viewModel
         binding.lifecycleOwner = this
 
+        
+        binding.executePendingBindings()
 
         viewModel.eventPlayAgain.observe(viewLifecycleOwner, Observer { playAgain ->
             if (playAgain) {

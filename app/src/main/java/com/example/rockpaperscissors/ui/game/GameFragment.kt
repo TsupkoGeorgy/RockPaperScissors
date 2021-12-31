@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.example.rockpaperscissors.R
 import com.example.rockpaperscissors.database.GameResult
 import com.example.rockpaperscissors.database.GameResultDatabase
 import com.example.rockpaperscissors.databinding.GameFragmentBinding
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class GameFragment : Fragment() {
@@ -46,20 +48,15 @@ class GameFragment : Fragment() {
         binding.gameViewModel = gameViewModel
         binding.lifecycleOwner = this
 
-        val adapter = GameResultAdapter()
-        binding.gameResultList.adapter = adapter
-        binding.gameResultList.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.gameResultList.addItemDecoration(
-            DividerItemDecoration(
-                context, LinearLayoutManager.VERTICAL
-            )
-        )
-        gameViewModel.games.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.submitList(it) {
-                    binding.gameResultList.scrollToPosition(0)
-                }
+
+
+        gameViewModel.eventGameFinish.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                findNavController()
+                    .navigate(GameFragmentDirections.actionGameFragmentToResultFragment())
+
+                gameViewModel.onGameFinishComplete()
             }
         })
         return binding.root

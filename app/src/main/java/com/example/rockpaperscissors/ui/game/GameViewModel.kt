@@ -14,10 +14,6 @@ class GameViewModel(
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
 
     private lateinit var wordList: MutableList<String>
 
@@ -25,12 +21,16 @@ class GameViewModel(
     val gameResult: LiveData<String>
         get() = _gameResult
 
+    // Event which triggers the end of the game
+    private val _eventGameFinish = MutableLiveData<Boolean>()
+    val eventGameFinish: LiveData<Boolean>
+        get() = _eventGameFinish
+
 
     private var _score = MutableLiveData<String>()
-
     private val _playerChoice = MutableLiveData<String>()
 
-    val games = dataSource.getAllGameResults()
+
 
 
     fun onRockButtonClicked() {
@@ -38,6 +38,7 @@ class GameViewModel(
         uiScope.launch {
             gameResult()
         }
+        _eventGameFinish.value = true
     }
 
     fun onPaperButtonClicked() {
@@ -45,6 +46,7 @@ class GameViewModel(
         uiScope.launch {
             gameResult()
         }
+        _eventGameFinish.value = true
     }
 
     fun onScissorsButtonClicked() {
@@ -52,6 +54,7 @@ class GameViewModel(
         uiScope.launch {
             gameResult()
         }
+        _eventGameFinish.value = true
     }
 
     init {
@@ -67,7 +70,7 @@ class GameViewModel(
             playerScore = 0
             gameScore = 0
             _gameResult.value = "Tie!"
-            _score.value = "$gameScore || $playerScore "
+            _score.value = "$playerScore || $gameScore "
         } else if (
             (_playerChoice.value == "Rock" && wordList.first() == "Scissors") ||
             (_playerChoice.value == "Paper" && wordList.first() == "Rock") ||
@@ -76,17 +79,16 @@ class GameViewModel(
             playerScore = 1
             gameScore = 0
             _gameResult.value = "You win!"
-            _score.value = "$gameScore || $playerScore "
+            _score.value = "$playerScore || $gameScore "
         } else {
             playerScore = 0
             gameScore = 1
             _gameResult.value = "You lose!"
-            _score.value = "$gameScore || $playerScore "
+            _score.value = "$playerScore || $gameScore "
         }
 
 
         val gameResult = GameResult(0, _gameResult.value!!, _score.value!!)
-
 
         uiScope.launch {
             insert(gameResult)
@@ -107,5 +109,17 @@ class GameViewModel(
         )
         wordList.shuffle()
     }
+
+
+    fun onGameFinishComplete() {
+        _eventGameFinish.value = false
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
+
 }
 

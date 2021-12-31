@@ -22,6 +22,9 @@ interface GameResultDatabaseDao {
     fun getAllGameResults(): LiveData<List<GameResult>>
 
     @Query("SELECT * FROM game_result_history_database ORDER BY id DESC LIMIT 1")
-    suspend fun getGame(): GameResult?
+    suspend fun getGame(): GameResult
+
+    @Query("SELECT * FROM game_result_history_database WHERE id = :key")
+    fun getGameWithId(key: Long): LiveData<GameResult>
 
 }

@@ -1,16 +1,21 @@
 package com.example.rockpaperscissors.ui.result
 
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.*
+import com.example.rockpaperscissors.database.GameResult
 import com.example.rockpaperscissors.database.GameResultDatabaseDao
+import kotlinx.coroutines.*
 import javax.sql.DataSource
 
 class ResultViewModel(
-    dataSource: GameResultDatabaseDao,
-    id: Long
+    dataSource: GameResultDatabaseDao
 ) : ViewModel() {
+
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    val database = dataSource
+    private var game : GameResult = GameResult()
 
     private val _resultText = MutableLiveData<String>()
     val resultText: LiveData<String>
@@ -29,8 +34,22 @@ class ResultViewModel(
         get() = _eventCloseGame
 
     init {
-        _resultText.value = ""
-        _scoreText.value = ""
+        getResult()
+    }
+
+    private fun getResult() {
+        uiScope.launch {
+            get()
+            _resultText.value = game.result
+            _scoreText.value = game.score
+            Log.i("id", "game result ${game.result} game score ${game.score}")
+        }
+    }
+
+    private suspend fun get() {
+        withContext(Dispatchers.IO) {
+            game = database.getGame()
+        }
     }
 
     fun onRestartGameComplete() {
@@ -47,5 +66,10 @@ class ResultViewModel(
 
     fun onCloseComplete() {
         _eventCloseGame.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }
